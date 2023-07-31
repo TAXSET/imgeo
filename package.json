@@ -30,6 +30,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@tailwindcss/typography": "^0.5.9",
 		"i": "^0.3.7",
 		"npm": "^9.8.1"
 	}
