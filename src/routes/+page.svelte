@@ -1,42 +1,55 @@
 <script>
-	import EntryCard from "../components/EntryCard/EntryCard.svelte";
+	import EntryCard from '../components/EntryCard/EntryCard.svelte';
+	import Map from "../components/Map/Map.svelte"
 
-/**
-   * Represents an ImageInput Svelte component that allows the user to select an image file.
-   * @module ImageInput
-   */
+	/**
+	 * Svelte component to select and display images.
+	 * @component
+	 */
 
-  /**
-   * The selected image file.
-   * @type {File | undefined}
-   */
-   let selectedFile;
+	/**
+	 * Array to store selected files.
+	 * @type {Array<File>}
+	 */
+	let selectedFiles = [];
 
-/**
- * Handles the file change event when a new image file is selected.
- * Updates the `selectedFile` variable with the chosen image file.
- * @param {any} event - The file change event.
- */
-const handleFileChange = (event) => {
-  const file = event?.target.files[0];
-  if (file && file.type.startsWith('image/')) {
-	selectedFile = file;
-  } else {
-	selectedFile = undefined;
-  }
-};
+	/**
+	 * Handles the file change event when a new image file is selected.
+	 * Updates the `selectedFile` variable with the chosen image file.
+	 * @param {any} event - The file change event.
+	 */
+	const handleFileChange = (event) => {
+		/**
+		 * @type {FileList}
+		 */
+		selectedFiles = Array.from(event?.target.files);
+	};
 </script>
+
 <div class="prose w-11/12 container mx-auto max-w-screen-2xl">
-	<div class="grid">
-		<div class="col-span-2">
+	<div class="grid grid-cols-12 gap-4">
+		<div class="col-span-3 overflow-y-scroll max-h-screen">
 			<h2>Files</h2>
-			<EntryCard
-				file = {selectedFile}
+
+			<h4>Currently editing</h4>
+
+			<div class="grid grid-cols-6">
+				{#each selectedFiles as file, index}
+					<EntryCard {file} {index} />
+				{/each}
+			</div>
+
+			<input
+				type="file"
+				multiple
+				class="file-input w-full max-w-xs"
+				accept="image/*"
+				on:change={handleFileChange}
 			/>
-			<input type="file" accept="image/*" on:change={handleFileChange} />
 		</div>
-		<div class="col">
-			<p>Test</p>
+		<div class="col-span-9">
+			<h2>Select location</h2>
+			<Map />
 		</div>
 	</div>
 </div>
